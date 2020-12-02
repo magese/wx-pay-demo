@@ -1,6 +1,6 @@
 package cn.mb.wxpaydemo.service.impl;
 
-import cn.mb.wxpaydemo.constant.WxPayConstant;
+import cn.mb.wxpaydemo.config.WxConfig;
 import cn.mb.wxpaydemo.service.PayService;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
@@ -24,6 +24,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class PayServiceImpl implements PayService {
 
+    private final WxConfig wxConfig;
+
+    public PayServiceImpl(WxConfig wxConfig) {
+        this.wxConfig = wxConfig;
+    }
+
     /**
      * 由于是代小程序开发，商户号未知，因而需要通过appId获取对应小程序商户密钥
      *  获取appId
@@ -41,7 +47,7 @@ public class PayServiceImpl implements PayService {
             //  获取appId
             String appId = result.getAppid();
             //  获取appId对应商户密钥
-            String mchKey = WxPayConstant.MCH_KEY;
+            String mchKey = wxConfig.getMchKey();
             WxPayService wxPayService = new WxPayServiceImpl();
             WxPayConfig wxPayConfig = new WxPayConfig();
             wxPayConfig.setMchKey(mchKey);
@@ -84,7 +90,7 @@ public class PayServiceImpl implements PayService {
             //  获取appId
             String appId = result.getAppid();
             //  获取appId对应商户密钥
-            String mchKey = WxPayConstant.MCH_KEY;
+            String mchKey = wxConfig.getMchKey();
             WxPayService wxPayService = new WxPayServiceImpl();
             WxPayConfig wxPayConfig = new WxPayConfig();
             wxPayConfig.setMchKey(mchKey);

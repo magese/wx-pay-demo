@@ -9,6 +9,7 @@ import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -24,11 +25,16 @@ import java.math.BigDecimal;
 @Component
 public class WxPayUtil {
 
-    //  TODO 支付回调url - 根据内网穿透提供域名修改
-    private final String PAY_NOTIFY_URL = "http://bbwangbb.ngrok.wendal.cn/payNotify";
+    @Value("${wx.payNotifyUrl}")
+    private String payNotifyUrl;
+    @Value("${wx.refundNotifyUrl}")
+    private String refundNotifyUrl;
 
-    //  TODO 退款回调url - 根据内网穿透提供域名修改
-    private final String REFUND_NOTIFY_URL = "http://bbwangbb.ngrok.wendal.cn/refundNotify";
+    private final WxPayService wxPayService;
+
+    public WxPayUtil(WxPayService wxPayService) {
+        this.wxPayService = wxPayService;
+    }
 
     /**
      * <p>
@@ -49,7 +55,6 @@ public class WxPayUtil {
     public WxPayMpOrderResult createOrderJSAPI(String appId, String mchId, String mchKey,
                                                String body, BigDecimal totalFee, String spbillCreateIp,
                                                String outTradeNo, String openId) throws Exception {
-        WxPayService wxPayService = new WxPayServiceImpl();
         WxPayConfig wxPayConfig = new WxPayConfig();
         wxPayConfig.setAppId(appId);
         wxPayConfig.setMchId(mchId);
@@ -57,7 +62,7 @@ public class WxPayUtil {
         wxPayConfig.setSignType(WxPayConstants.SignType.MD5);
         wxPayConfig.setTradeType(WxPayConstants.TradeType.JSAPI);
         wxPayService.setConfig(wxPayConfig);
-        wxPayConfig.setNotifyUrl(PAY_NOTIFY_URL);
+        wxPayConfig.setNotifyUrl(payNotifyUrl);
         WxPayUnifiedOrderRequest wxPayUnifiedOrderRequest = new WxPayUnifiedOrderRequest();
         wxPayUnifiedOrderRequest.setBody(body);
         wxPayUnifiedOrderRequest.setTotalFee(BaseWxPayRequest.yuanToFen(totalFee.toString()));
@@ -80,7 +85,6 @@ public class WxPayUtil {
      * @date 2020-12-02 09:49:28
      */
     public WxPayOrderQueryResult queryOrder(String appId, String mchId, String mchKey, String outTradeNo) throws Exception {
-        WxPayService wxPayService = new WxPayServiceImpl();
         WxPayConfig wxPayConfig = new WxPayConfig();
         wxPayConfig.setAppId(appId);
         wxPayConfig.setMchId(mchId);
@@ -112,7 +116,6 @@ public class WxPayUtil {
     public WxPayRefundResult refund(String appId, String mchId, String mchKey,
                               byte[] keyContent, String outTradeNo, String outRefundNo,
                               BigDecimal totalFee, BigDecimal refundFee) throws Exception {
-        WxPayService wxPayService = new WxPayServiceImpl();
         WxPayConfig wxPayConfig = new WxPayConfig();
         wxPayConfig.setAppId(appId);
         wxPayConfig.setMchId(mchId);
@@ -123,7 +126,7 @@ public class WxPayUtil {
         wxPayRefundRequest.setOutRefundNo(outRefundNo);
         wxPayRefundRequest.setTotalFee(BaseWxPayRequest.yuanToFen(totalFee.toString()));
         wxPayRefundRequest.setRefundFee(BaseWxPayRequest.yuanToFen(refundFee.toString()));
-        wxPayRefundRequest.setNotifyUrl(REFUND_NOTIFY_URL);
+        wxPayRefundRequest.setNotifyUrl(refundNotifyUrl);
         wxPayService.setConfig(wxPayConfig);
         WxPayRefundResult refund = wxPayService.refund(wxPayRefundRequest);
         return refund;
@@ -142,7 +145,6 @@ public class WxPayUtil {
      * @date 2020-12-02 09:49:28
      */
     public WxPayRefundQueryResult refundQuery(String appId, String mchId, String mchKey, String outRefundNo) throws Exception {
-        WxPayService wxPayService = new WxPayServiceImpl();
         WxPayConfig wxPayConfig = new WxPayConfig();
         wxPayConfig.setAppId(appId);
         wxPayConfig.setMchId(mchId);
