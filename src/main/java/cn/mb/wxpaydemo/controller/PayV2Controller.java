@@ -2,37 +2,33 @@ package cn.mb.wxpaydemo.controller;
 
 import cn.hutool.core.io.FileUtil;
 import cn.mb.wxpaydemo.config.WxConfig;
-import cn.mb.wxpaydemo.service.PayService;
-import cn.mb.wxpaydemo.util.WxPayUtil;
+import cn.mb.wxpaydemo.service.PayV2Service;
+import cn.mb.wxpaydemo.util.WxPayV2Util;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
 /**
  * <p>
- *  支付接口
+ *  v2支付接口
  * </p>
  *
  * @author: guohaibin
  * @createDate: 2020/12/1
  */
-@Slf4j
 @RestController
-public class PayController {
+@RequestMapping("/v2")
+public class PayV2Controller {
 
-    private final PayService payService;
-    private final WxPayUtil wxPayUtil;
+    private final PayV2Service payV2Service;
+    private final WxPayV2Util wxPayV2Util;
     private final WxConfig wxConfig;
 
-    public PayController(PayService payService, WxPayUtil wxPayUtil, WxConfig wxConfig) {
-        this.payService = payService;
-        this.wxPayUtil = wxPayUtil;
+    public PayV2Controller(PayV2Service payV2Service, WxPayV2Util wxPayV2Util, WxConfig wxConfig) {
+        this.payV2Service = payV2Service;
+        this.wxPayV2Util = wxPayV2Util;
         this.wxConfig = wxConfig;
     }
 
@@ -48,7 +44,7 @@ public class PayController {
     @GetMapping("/prepay")
     public WxPayMpOrderResult prepay(String outTradeNo) throws Exception {
         //  TODO openId参数需要修改为appId下的支付用户的openId
-        return wxPayUtil.createOrderJSAPI(
+        return wxPayV2Util.createOrderJSAPI(
                 wxConfig.getAppId(), wxConfig.getMchId(), wxConfig.getMchKey(),
                 "测试", BigDecimal.valueOf(0.01), "127.0.0.1",
                 outTradeNo, "oH-4D5Xyc3Csg3yKC3Bv_8fq4qjI"
@@ -67,7 +63,7 @@ public class PayController {
     @PostMapping("/payNotify")
     public String payNotify(@RequestBody String xmlData) {
         //  需要考虑恶意调用，非法调用可以不考虑，因为有签名验证，但是要避免多次恶意调用
-        return payService.payNotify(xmlData);
+        return payV2Service.payNotify(xmlData);
     }
 
     /**
@@ -81,7 +77,7 @@ public class PayController {
      */
     @GetMapping("/refund")
     public WxPayRefundResult refund(String outTradeNo) throws Exception {
-        return wxPayUtil.refund(
+        return wxPayV2Util.refund(
                 wxConfig.getAppId(), wxConfig.getMchId(), wxConfig.getMchKey(),
                 FileUtil.readBytes(wxConfig.getCertPath()), outTradeNo, outTradeNo,
                 BigDecimal.valueOf(0.01), BigDecimal.valueOf(0.01)
@@ -100,7 +96,7 @@ public class PayController {
     @PostMapping("/refundNotify")
     public String refundNotify(@RequestBody String xmlData) {
         //  需要考虑恶意调用，非法调用可以不考虑，因为有签名验证，但是要避免多次恶意调用
-        return payService.refundNotify(xmlData);
+        return payV2Service.refundNotify(xmlData);
     }
 
 }

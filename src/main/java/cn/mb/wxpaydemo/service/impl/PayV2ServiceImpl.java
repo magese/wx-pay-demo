@@ -1,7 +1,7 @@
 package cn.mb.wxpaydemo.service.impl;
 
 import cn.mb.wxpaydemo.config.WxConfig;
-import cn.mb.wxpaydemo.service.PayService;
+import cn.mb.wxpaydemo.service.PayV2Service;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.notify.WxPayRefundNotifyResult;
@@ -22,11 +22,11 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class PayServiceImpl implements PayService {
+public class PayV2ServiceImpl implements PayV2Service {
 
     private final WxConfig wxConfig;
 
-    public PayServiceImpl(WxConfig wxConfig) {
+    public PayV2ServiceImpl(WxConfig wxConfig) {
         this.wxConfig = wxConfig;
     }
 

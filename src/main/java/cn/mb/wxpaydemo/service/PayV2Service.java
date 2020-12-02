@@ -8,7 +8,7 @@ package cn.mb.wxpaydemo.service;
  * @author: guohaibin
  * @createDate: 2020/12/1
  */
-public interface PayService {
+public interface PayV2Service {
 
     /**
      * <p>

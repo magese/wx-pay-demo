@@ -8,7 +8,6 @@ import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -23,16 +22,16 @@ import java.math.BigDecimal;
  * @createDate: 2020/12/1
  */
 @Component
-public class WxPayUtil {
+public class WxPayV2Util {
 
-    @Value("${wx.payNotifyUrl}")
-    private String payNotifyUrl;
-    @Value("${wx.refundNotifyUrl}")
-    private String refundNotifyUrl;
+    @Value("${wx.v2PayNotifyUrl}")
+    private String v2PayNotifyUrl;
+    @Value("${wx.v2RefundNotifyUrl}")
+    private String v2RefundNotifyUrl;
 
     private final WxPayService wxPayService;
 
-    public WxPayUtil(WxPayService wxPayService) {
+    public WxPayV2Util(WxPayService wxPayService) {
         this.wxPayService = wxPayService;
     }
 
@@ -62,7 +61,7 @@ public class WxPayUtil {
         wxPayConfig.setSignType(WxPayConstants.SignType.MD5);
         wxPayConfig.setTradeType(WxPayConstants.TradeType.JSAPI);
         wxPayService.setConfig(wxPayConfig);
-        wxPayConfig.setNotifyUrl(payNotifyUrl);
+        wxPayConfig.setNotifyUrl(v2PayNotifyUrl);
         WxPayUnifiedOrderRequest wxPayUnifiedOrderRequest = new WxPayUnifiedOrderRequest();
         wxPayUnifiedOrderRequest.setBody(body);
         wxPayUnifiedOrderRequest.setTotalFee(BaseWxPayRequest.yuanToFen(totalFee.toString()));
@@ -126,7 +125,7 @@ public class WxPayUtil {
         wxPayRefundRequest.setOutRefundNo(outRefundNo);
         wxPayRefundRequest.setTotalFee(BaseWxPayRequest.yuanToFen(totalFee.toString()));
         wxPayRefundRequest.setRefundFee(BaseWxPayRequest.yuanToFen(refundFee.toString()));
-        wxPayRefundRequest.setNotifyUrl(refundNotifyUrl);
+        wxPayRefundRequest.setNotifyUrl(v2RefundNotifyUrl);
         wxPayService.setConfig(wxPayConfig);
         WxPayRefundResult refund = wxPayService.refund(wxPayRefundRequest);
         return refund;

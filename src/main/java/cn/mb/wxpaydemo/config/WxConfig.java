@@ -3,7 +3,6 @@ package cn.mb.wxpaydemo.config;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,9 +20,12 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "wx")
 public class WxConfig {
     private String appId;
-    private String mchId = "";
-    private String mchKey = "";
-    private String certPath = "";
+    private String mchId;
+    private String mchKey;
+    private String certPath;
+    private String apiV3Key;
+    private String privateKeyPath;
+    private String privateCertPath;
 
     @Bean
     public WxPayService getWxPayService() {

@@ -2,9 +2,16 @@ server:
   port: 8080
 
 wx:
-  appId:           # appId
-  mchId:           # 商户号
-  mchKey:          # 商户密钥
-  certPath:        # 商户证书(.p12)
-  payNotifyUrl:    # 支付回调
-  refundNotifyUrl: # 退款回调
+  appId:              # appId
+  mchId:             # 商户号
+  mchKey:             # 商户密钥
+  certPath:          # 商户证书(.p12)
+  v2PayNotifyUrl:    # 支付回调
+  v2RefundNotifyUrl: # 退款回调
+
+  # v3
+  apiV3Key:   # api v3 密钥
+  privateKeyPath:   # 私钥文件
+  privateCertPath:   # 证书文件
+  v3PayNotifyUrl:    # 支付回调
+  # v3暂未提供退款接口
