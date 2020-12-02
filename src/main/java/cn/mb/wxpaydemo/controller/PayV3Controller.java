@@ -60,7 +60,7 @@ public class PayV3Controller {
      * @date 2020-12-02 14:14:29
      */
     @PostMapping("/payNotify")
-    public String payNotify(@RequestBody PayV3Notify payV3Notify) {
+    public String payNotify(@RequestBody PayV3Notify payV3Notify) throws Exception{
         //  需要考虑恶意调用，非法调用可以不考虑，因为有签名验证，但是要避免多次恶意调用
         return payV3Service.payNotify(payV3Notify);
     }

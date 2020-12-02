@@ -48,7 +48,7 @@ public class PayV3ServiceImpl implements PayV3Service {
             //  修改订单状态
             return WxPayNotifyResponse.success("处理成功!");
         } catch (Exception e) {
-            log.error("微信回调结果异常,异常原因{}", e.getMessage());
+            log.error("微信v3支付回调异常,异常原因:{},参数为:{}", e.getMessage(), payV3Notify);
             return WxPayNotifyResponse.fail(e.getMessage());
         }
     }

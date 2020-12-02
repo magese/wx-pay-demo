@@ -71,6 +71,7 @@ public class WxPayV3Util {
         WxPayService wxPayService = new WxPayServiceImpl();
         WxPayConfig wxPayConfig = createV3WxPayConfig(mchId, apiV3Key, privateKey, privateCert, isUrl);
         wxPayService.setConfig(wxPayConfig);
+        //  设置参数
         JSONObject data = new JSONObject();
         data.set("appid", appId);
         data.set("mchid", mchId);
@@ -83,9 +84,11 @@ public class WxPayV3Util {
         JSONObject payer = new JSONObject();
         payer.set("openid", openId);
         data.set("payer", payer);
+        //  调接口
         String result = wxPayService.postV3("https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi",
                 data.toString());
         JSONObject prepayObject = JSONUtil.parseObj(result);
+        //  获取paySign
         if (prepayObject.containsKey("prepay_id")) {
             //  预支付签名
             String packageStr = "prepay_id=" + JSONUtil.parseObj(result).getStr("prepay_id");

@@ -68,7 +68,7 @@ public class PayV2ServiceImpl implements PayV2Service {
             }
             return WxPayNotifyResponse.success("处理成功!");
         } catch (Exception e) {
-            log.error("微信回调结果异常,异常原因{}", e.getMessage());
+            log.error("微信支付回调异常,异常原因:{},参数为:{}", e.getMessage(), xmlData);
             return WxPayNotifyResponse.fail(e.getMessage());
         }
     }
@@ -111,7 +111,7 @@ public class PayV2ServiceImpl implements PayV2Service {
             }
             return WxPayNotifyResponse.success("处理成功!");
         } catch (Exception e) {
-            log.error("微信回调结果异常,异常原因{}", e.getMessage());
+            log.error("微信退款回调异常,异常原因:{},参数为:{}", e.getMessage(), xmlData);
             return WxPayNotifyResponse.fail(e.getMessage());
         }
     }
